@@ -6,13 +6,13 @@ target 'UnitTestDemo' do
   use_frameworks!
 
   # Pods for UnitTestDemo
-  pod 'RxSwift', '~> 5'
-  pod 'RxCocoa', '~> 5'
-
+  pod 'RxSwift'
+  pod 'RxCocoa'
+  pod 'Moya/RxSwift'
 
   target 'UnitTestDemoTests' do
     inherit! :search_paths
-    pod 'RxBlocking', '~> 5'
-    pod 'RxTest', '~> 5'
+    pod 'RxBlocking'
+    pod 'RxTest'
   end
 end
