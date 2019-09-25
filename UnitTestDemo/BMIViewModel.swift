@@ -30,9 +30,9 @@ class BMIViewModel {
         
         let bmiStream = Observable.combineLatest(heightInput, weightInput)
             .map { (height, weight) -> String in
-                if height == 0 || weight == 0 {
-                    return "Invalid Inputs"
-                }
+                if weight == 0 && height == 0 { return "Invalid Inputs" }
+                if weight == 0 { return "Invalid Weight" }
+                if height == 0 { return "Invalid Height" }
                 return "\(weight / (height * height))"
             }
             .asDriver(onErrorJustReturn: "Invalid")
