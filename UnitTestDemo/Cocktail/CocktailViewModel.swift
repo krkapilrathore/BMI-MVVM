@@ -25,22 +25,40 @@ class CocktailViewModel {
     }
     
     func transform(_ input: Input) -> Output {
-        let fetchNewCocktailEvents = Observable.merge(input.viewDidLoadEvent, input.fetchButtonTap)
         
-        let cocktail = fetchNewCocktailEvents.flatMapLatest { _ in
-            return self.usecase
-                .fetchCocktail()
-                .map { $0.drinks.first! }
-                .catchError({ error -> Observable<Cocktail> in
-                    return Observable.just(Cocktail(name: "Error", instructions: error.localizedDescription))
-                })
+        let newRandomCocktail = self.usecase
+            .fetchRandomCocktail()
+            .map { $0.drinks.first! }
+            .catchError({ error -> Observable<Cocktail> in
+                return Observable.just(Cocktail(id: "", name: "Error", instructions: error.localizedDescription))
+            })
+        
+        let cocktailFetchedOnLoad = input.viewDidLoadEvent.flatMap { _ -> Observable<Cocktail> in
+            if let drinkId = UserDefaults.standard.string(forKey: "favouriteDrinkId") {
+                return self.usecase
+                    .fetchCocktailById(drinkId)
+                    .map { $0.drinks.first! }
+                    .catchError({ error -> Observable<Cocktail> in
+                        return Observable.just(Cocktail(id: "", name: "Error", instructions: error.localizedDescription))
+                    })
             }
-            .asDriver(onErrorJustReturn: Cocktail(name: "Error", instructions: "Unknown Error"))
+            
+            return newRandomCocktail
+        }
+        .asDriver(onErrorJustReturn: Cocktail(id: "", name: "Error", instructions: "Unknown Error"))
+        
+        
+        let fetchButtonCocktail = input.fetchButtonTap
+            .flatMapLatest { _ in return newRandomCocktail }
+            .asDriver(onErrorJustReturn: Cocktail(id: "", name: "Error", instructions: "Unknown Error"))
+        
+        let currentCocktail = Driver.merge(fetchButtonCocktail, cocktailFetchedOnLoad)
         
         let savingInDB = input.setFavouriteButtonTap
             .do(onNext: { print("SET FAV") })
-            .withLatestFrom(cocktail)
+            .withLatestFrom(currentCocktail)
             .flatMapLatest { [weak self] cocktail -> Driver<String> in
+                UserDefaults.standard.set(cocktail.id, forKey: "favouriteDrinkId")
                 UserDefaults.standard.set(cocktail.name, forKey: "favouriteDrink")
                 return Driver.just(cocktail.name)
             }
@@ -50,6 +68,6 @@ class CocktailViewModel {
         
         let favouriteDrink = Driver.merge(savingInDB, favouriteDrinkFromDB)
         
-        return Output(favouriteDrink: favouriteDrink, currentCocktail: cocktail)
+        return Output(favouriteDrink: favouriteDrink, currentCocktail: currentCocktail)
     }
 }

@@ -9,10 +9,12 @@
 import Foundation
 
 struct Cocktail: Decodable, Equatable {
+    let id: String
     let name: String
     let instructions: String
     
     enum CodingKeys: String, CodingKey {
+        case id = "idDrink"
         case name = "strDrink"
         case instructions = "strInstructions"
     }

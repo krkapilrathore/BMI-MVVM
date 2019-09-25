@@ -10,6 +10,7 @@ import Moya
 
 enum CocktailTarget {
     case getRandom
+    case getById(String)
 }
 
 extension CocktailTarget: TargetType {
@@ -18,7 +19,12 @@ extension CocktailTarget: TargetType {
     
     var baseURL: URL { return URL(string: "https://www.thecocktaildb.com/api/json/v1/1")! }
     
-    var path: String { return "/random.php" }
+    var path: String {
+        switch self {
+            case .getRandom         : return "/random.php"
+            case .getById(let id)   : return "/lookup.php?i=\(id)"
+        }
+    }
     
     var method: Method { return .get }
     
