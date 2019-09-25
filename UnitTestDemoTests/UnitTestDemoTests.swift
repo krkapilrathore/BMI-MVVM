@@ -31,6 +31,13 @@ class UnitTestDemoTests: XCTestCase {
         output.bmi.drive(testObserver).disposed(by: disposeBag)
     }
     
+    override func tearDown() {
+        testObserver = nil
+        disposeBag = nil
+        weightInput = nil
+        heightInput = nil
+    }
+    
     func test_weightFieldEmpty_heightFieldEmpty() {
         // Act
         weightInput.onNext("")
