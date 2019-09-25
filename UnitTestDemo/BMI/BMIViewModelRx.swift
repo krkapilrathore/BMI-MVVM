@@ -35,7 +35,7 @@ class BMIViewModelRx {
                 if height == 0 { return "Invalid Height" }
                 return "\(weight / (height * height))"
             }
-            .asDriver(onErrorJustReturn: "Invalid")
+            .asDriver(onErrorJustReturn: "Unknown Error")
         
         return Output(bmi: bmiStream)
     }
