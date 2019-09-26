@@ -33,20 +33,21 @@ class CocktailViewModel {
                 return Observable.just(Cocktail(id: "", name: "Error", instructions: error.localizedDescription))
             })
         
-        let cocktailFetchedOnLoad = input.viewDidLoadEvent.flatMap { _ -> Observable<Cocktail> in
-            if let drinkId = UserDefaults.standard.string(forKey: "favouriteDrinkId") {
-                return self.usecase
-                    .fetchCocktailById(drinkId)
-                    .map { $0.drinks.first! }
-                    .catchError({ error -> Observable<Cocktail> in
-                        return Observable.just(Cocktail(id: "", name: "Error", instructions: error.localizedDescription))
-                    })
+        let cocktailFetchedOnLoad = input.viewDidLoadEvent
+            .flatMap({ _ -> Observable<Cocktail> in
+                guard let drinkData = UserDefaults.standard.data(forKey: "favouriteDrink"),
+                    let cocktail = try? JSONDecoder().decode(Cocktail.self, from: drinkData) else {
+                        return Observable.just(Cocktail(id: "", name: "Error", instructions: "Could not fetch from DB"))
+                }
+                return Observable.just(cocktail)
+            })
+            .flatMap { cocktail -> Observable<Cocktail> in
+                if cocktail.id.isEmpty {
+                    return newRandomCocktail
+                }
+                return Observable.just(cocktail)
             }
-            
-            return newRandomCocktail
-        }
-        .asDriver(onErrorJustReturn: Cocktail(id: "", name: "Error", instructions: "Unknown Error"))
-        
+            .asDriver(onErrorJustReturn: Cocktail(id: "", name: "Error", instructions: "Unknown Error"))
         
         let fetchButtonCocktail = input.fetchButtonTap
             .flatMapLatest { _ in return newRandomCocktail }
@@ -55,16 +56,23 @@ class CocktailViewModel {
         let currentCocktail = Driver.merge(fetchButtonCocktail, cocktailFetchedOnLoad)
         
         let savingInDB = input.setFavouriteButtonTap
-            .do(onNext: { print("SET FAV") })
             .withLatestFrom(currentCocktail)
-            .flatMapLatest { [weak self] cocktail -> Driver<String> in
-                UserDefaults.standard.set(cocktail.id, forKey: "favouriteDrinkId")
-                UserDefaults.standard.set(cocktail.name, forKey: "favouriteDrink")
+            .flatMapLatest { cocktail -> Driver<String> in
+                let drinkData = try? JSONEncoder().encode(cocktail)
+                UserDefaults.standard.set(drinkData, forKey: "favouriteDrink")
                 return Driver.just(cocktail.name)
             }
             .asDriver(onErrorJustReturn: "Unknown Error")
         
-        let favouriteDrinkFromDB = Driver.just(UserDefaults.standard.string(forKey: "favouriteDrink") ?? "I Don't Drink!")
+        let favouriteDrinkFromDB = input.viewDidLoadEvent
+            .flatMap({ _ -> Observable<String> in
+                guard let drinkData = UserDefaults.standard.data(forKey: "favouriteDrink"),
+                    let cocktail = try? JSONDecoder().decode(Cocktail.self, from: drinkData) else {
+                        return Observable.just("Error on fetch from DB")
+                }
+                return Observable.just(cocktail.name)
+            })
+            .asDriver(onErrorJustReturn: "I Don't Drink!")
         
         let favouriteDrink = Driver.merge(savingInDB, favouriteDrinkFromDB)
         

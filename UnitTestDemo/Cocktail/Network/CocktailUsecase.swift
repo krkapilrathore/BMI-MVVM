@@ -12,7 +12,6 @@ import RxSwift
 
 protocol CocktailUsecase {
     func fetchRandomCocktail() -> Observable<CocktailResponse>
-    func fetchCocktailById(_ id: String) -> Observable<CocktailResponse>
 }
 
 class DefaultCocktailUsecase: CocktailUsecase {
@@ -21,13 +20,6 @@ class DefaultCocktailUsecase: CocktailUsecase {
     func fetchRandomCocktail() -> Observable<CocktailResponse> {
         return provider.rx
             .request(.getRandom)
-            .map(CocktailResponse.self)
-            .asObservable()
-    }
-    
-    func fetchCocktailById(_ id: String) -> Observable<CocktailResponse> {
-        return provider.rx
-            .request(.getById(id))
             .map(CocktailResponse.self)
             .asObservable()
     }
