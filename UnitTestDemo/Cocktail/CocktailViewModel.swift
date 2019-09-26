@@ -26,51 +26,59 @@ class CocktailViewModel {
     
     func transform(_ input: Input) -> Output {
         
-        let newRandomCocktail = self.usecase
-            .fetchRandomCocktail()
-            .map { $0.drinks.first! }
-            .catchError({ error -> Observable<Cocktail> in
-                return Observable.just(Cocktail(id: "", name: "Error", instructions: error.localizedDescription))
-            })
+        func getNewRandomCocktail() -> Observable<Cocktail> {
+            return self.usecase
+                .fetchRandomCocktail()
+                .map { $0.drinks.first! }
+                .catchError({ error -> Observable<Cocktail> in
+                    return Observable.just(Cocktail(id: "", name: "Error", instructions: error.localizedDescription))
+                })
+        }
+        
+        func getCocktailFromDB() -> Observable<Cocktail> {
+            guard let drinkData = UserDefaults.standard.data(forKey: "favouriteDrink"),
+                  let drink = try? JSONDecoder().decode(Cocktail.self, from: drinkData) else {
+                return Observable.just(Cocktail(id: "", name: "Error", instructions: "Could not fetch from DB"))
+            }
+            
+            return Observable.just(drink)
+        }
+        
+        func saveCocktailInDB(_ cocktail: Cocktail) -> Observable<Cocktail> {
+            let cocktailData = try? JSONEncoder().encode(cocktail)
+            UserDefaults.standard.set(cocktailData, forKey: "favouriteDrink")
+            return Observable.just(cocktail)
+        }
         
         let cocktailFetchedOnLoad = input.viewDidLoadEvent
-            .flatMap({ _ -> Observable<Cocktail> in
-                guard let drinkData = UserDefaults.standard.data(forKey: "favouriteDrink"),
-                    let cocktail = try? JSONDecoder().decode(Cocktail.self, from: drinkData) else {
-                        return Observable.just(Cocktail(id: "", name: "Error", instructions: "Could not fetch from DB"))
-                }
-                return Observable.just(cocktail)
-            })
+            .flatMap({ _  in return getCocktailFromDB() })
             .flatMap { cocktail -> Observable<Cocktail> in
                 if cocktail.id.isEmpty {
-                    return newRandomCocktail
+                    return getNewRandomCocktail()
                 }
                 return Observable.just(cocktail)
             }
             .asDriver(onErrorJustReturn: Cocktail(id: "", name: "Error", instructions: "Unknown Error"))
         
         let fetchButtonCocktail = input.fetchButtonTap
-            .flatMapLatest { _ in return newRandomCocktail }
+            .flatMapLatest { _ in return getNewRandomCocktail() }
             .asDriver(onErrorJustReturn: Cocktail(id: "", name: "Error", instructions: "Unknown Error"))
         
         let currentCocktail = Driver.merge(fetchButtonCocktail, cocktailFetchedOnLoad)
         
         let savingInDB = input.setFavouriteButtonTap
             .withLatestFrom(currentCocktail)
-            .flatMapLatest { cocktail -> Driver<String> in
-                let drinkData = try? JSONEncoder().encode(cocktail)
-                UserDefaults.standard.set(drinkData, forKey: "favouriteDrink")
-                return Driver.just(cocktail.name)
-            }
+            .flatMapLatest { saveCocktailInDB($0) }
+            .map { $0.name }
             .asDriver(onErrorJustReturn: "Unknown Error")
         
         let favouriteDrinkFromDB = input.viewDidLoadEvent
-            .flatMap({ _ -> Observable<String> in
-                guard let drinkData = UserDefaults.standard.data(forKey: "favouriteDrink"),
-                    let cocktail = try? JSONDecoder().decode(Cocktail.self, from: drinkData) else {
-                        return Observable.just("Error on fetch from DB")
+            .flatMap({ _  in return getCocktailFromDB() })
+            .map({ cocktail -> String in
+                if cocktail.id.isEmpty {
+                    return "I Don't Drink!"
                 }
-                return Observable.just(cocktail.name)
+                return cocktail.name
             })
             .asDriver(onErrorJustReturn: "I Don't Drink!")
         
