@@ -54,6 +54,7 @@ class CocktailViewModel {
         
         let savingInDB = input.setFavouriteButtonTap
             .withLatestFrom(currentCocktail)
+            .filter { !$0.id.isEmpty }
             .flatMapLatest { self.databaseManager.saveCocktail($0) }
             .map { $0.name }
             .asDriver(onErrorJustReturn: "Unknown Error")

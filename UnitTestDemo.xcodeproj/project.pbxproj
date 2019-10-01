@@ -19,6 +19,9 @@
 		346D3D40233BF02800E44B41 /* CocktailTarget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 346D3D3F233BF02800E44B41 /* CocktailTarget.swift */; };
 		34BE57DF23435E4900AEB5AD /* BMIViewModelRx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34BE57DE23435E4900AEB5AD /* BMIViewModelRx.swift */; };
 		34BE57E323436D9900AEB5AD /* BMIViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34BE57E223436D9900AEB5AD /* BMIViewModelTests.swift */; };
+		34BE57E523437E0B00AEB5AD /* CocktailViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34BE57E423437E0B00AEB5AD /* CocktailViewModelTests.swift */; };
+		34BE57E7234380DB00AEB5AD /* MockDatabaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34BE57E6234380DB00AEB5AD /* MockDatabaseManager.swift */; };
+		34BE57E92343816700AEB5AD /* MockCocktailUsecase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34BE57E82343816700AEB5AD /* MockCocktailUsecase.swift */; };
 		34CD7FD2233C8D6F00D47D0F /* DatabaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34CD7FD1233C8D6F00D47D0F /* DatabaseManager.swift */; };
 		34E35A99233BF2FE004285A5 /* CocktailUsecase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34E35A98233BF2FE004285A5 /* CocktailUsecase.swift */; };
 		34E35A9B233BF3FE004285A5 /* CocktailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34E35A9A233BF3FE004285A5 /* CocktailViewController.swift */; };
@@ -56,6 +59,9 @@
 		346D3D3F233BF02800E44B41 /* CocktailTarget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CocktailTarget.swift; sourceTree = "<group>"; };
 		34BE57DE23435E4900AEB5AD /* BMIViewModelRx.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BMIViewModelRx.swift; sourceTree = "<group>"; };
 		34BE57E223436D9900AEB5AD /* BMIViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BMIViewModelTests.swift; sourceTree = "<group>"; };
+		34BE57E423437E0B00AEB5AD /* CocktailViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CocktailViewModelTests.swift; sourceTree = "<group>"; };
+		34BE57E6234380DB00AEB5AD /* MockDatabaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockDatabaseManager.swift; sourceTree = "<group>"; };
+		34BE57E82343816700AEB5AD /* MockCocktailUsecase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockCocktailUsecase.swift; sourceTree = "<group>"; };
 		34CD7FD1233C8D6F00D47D0F /* DatabaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseManager.swift; sourceTree = "<group>"; };
 		34E35A98233BF2FE004285A5 /* CocktailUsecase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CocktailUsecase.swift; sourceTree = "<group>"; };
 		34E35A9A233BF3FE004285A5 /* CocktailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CocktailViewController.swift; sourceTree = "<group>"; };
@@ -118,7 +124,10 @@
 			isa = PBXGroup;
 			children = (
 				346D3D29233BD25F00E44B41 /* BMIViewModelRxTests.swift */,
+				34BE57E423437E0B00AEB5AD /* CocktailViewModelTests.swift */,
 				34BE57E223436D9900AEB5AD /* BMIViewModelTests.swift */,
+				34BE57E6234380DB00AEB5AD /* MockDatabaseManager.swift */,
+				34BE57E82343816700AEB5AD /* MockCocktailUsecase.swift */,
 				346D3D2B233BD25F00E44B41 /* Info.plist */,
 			);
 			path = UnitTestDemoTests;
@@ -414,6 +423,9 @@
 			files = (
 				346D3D2A233BD25F00E44B41 /* BMIViewModelRxTests.swift in Sources */,
 				34BE57E323436D9900AEB5AD /* BMIViewModelTests.swift in Sources */,
+				34BE57E7234380DB00AEB5AD /* MockDatabaseManager.swift in Sources */,
+				34BE57E92343816700AEB5AD /* MockCocktailUsecase.swift in Sources */,
+				34BE57E523437E0B00AEB5AD /* CocktailViewModelTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
