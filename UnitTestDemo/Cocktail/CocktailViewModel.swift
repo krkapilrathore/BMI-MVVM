@@ -30,18 +30,24 @@ class CocktailViewModel {
     }
     
     func transform(_ input: Input) -> Output {
+        
+        let newRandomCocktail = self.cocktailUsecase
+            .fetchRandomCocktail()
+            .map { $0.drinks.first! }
+            .catchError({ error -> Observable<Cocktail> in
+                return Observable.just(Cocktail(id: "", name: "Error", instructions: error.localizedDescription))
+            })
+        
         let cocktailFetchedOnLoad = input.viewDidLoadEvent
             .flatMap({ _  in return self.databaseManager.getCocktail() })
             .flatMap { cocktail -> Observable<Cocktail> in
-                if cocktail.id.isEmpty {
-                    return self.getNewRandomCocktail()
-                }
+                if cocktail.id.isEmpty { return newRandomCocktail }
                 return Observable.just(cocktail)
             }
             .asDriver(onErrorJustReturn: Cocktail(id: "", name: "Error", instructions: "Unknown Error"))
         
         let fetchButtonCocktail = input.fetchButtonTap
-            .flatMapLatest { _ in return self.getNewRandomCocktail() }
+            .flatMapLatest { _ in return newRandomCocktail }
             .asDriver(onErrorJustReturn: Cocktail(id: "", name: "Error", instructions: "Unknown Error"))
         
         let currentCocktail = Driver.merge(fetchButtonCocktail, cocktailFetchedOnLoad)
@@ -52,11 +58,10 @@ class CocktailViewModel {
             .map { $0.name }
             .asDriver(onErrorJustReturn: "Unknown Error")
         
-        let favouriteDrinkFromDB = self.databaseManager.getCocktail()
+        let favouriteDrinkFromDB = input.viewDidLoadEvent
+            .flatMap({ _  in return self.databaseManager.getCocktail() })
             .map({ cocktail -> String in
-                if cocktail.id.isEmpty {
-                    return "I Don't Drink!"
-                }
+                if cocktail.id.isEmpty { return "I Don't Drink!" }
                 return cocktail.name
             })
             .asDriver(onErrorJustReturn: "I Don't Drink!")
@@ -64,14 +69,5 @@ class CocktailViewModel {
         let favouriteDrink = Driver.merge(savingInDB, favouriteDrinkFromDB)
         
         return Output(favouriteDrink: favouriteDrink, currentCocktail: currentCocktail)
-    }
-    
-    private func getNewRandomCocktail() -> Observable<Cocktail> {
-        return self.cocktailUsecase
-            .fetchRandomCocktail()
-            .map { $0.drinks.first! }
-            .catchError({ error -> Observable<Cocktail> in
-                return Observable.just(Cocktail(id: "", name: "Error", instructions: error.localizedDescription))
-            })
     }
 }
