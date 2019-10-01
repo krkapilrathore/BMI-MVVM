@@ -11,8 +11,6 @@ import RxSwift
 import RxCocoa
 
 class CocktailViewModel {
-    private let usecase = DefaultCocktailUsecase()
-    
     struct Input {
         let viewDidLoadEvent: Observable<Void>
         let fetchButtonTap: Observable<Void>
@@ -24,56 +22,37 @@ class CocktailViewModel {
         let currentCocktail: Driver<Cocktail>
     }
     
+    private let databaseManager: DatabaseManager
+    private let cocktailUsecase: CocktailUsecase
+    init(_ databaseManager: DatabaseManager, _ cocktailUsecase: CocktailUsecase) {
+        self.databaseManager = databaseManager
+        self.cocktailUsecase = cocktailUsecase
+    }
+    
     func transform(_ input: Input) -> Output {
-        
-        func getNewRandomCocktail() -> Observable<Cocktail> {
-            return self.usecase
-                .fetchRandomCocktail()
-                .map { $0.drinks.first! }
-                .catchError({ error -> Observable<Cocktail> in
-                    return Observable.just(Cocktail(id: "", name: "Error", instructions: error.localizedDescription))
-                })
-        }
-        
-        func getCocktailFromDB() -> Observable<Cocktail> {
-            guard let drinkData = UserDefaults.standard.data(forKey: "favouriteDrink"),
-                  let drink = try? JSONDecoder().decode(Cocktail.self, from: drinkData) else {
-                return Observable.just(Cocktail(id: "", name: "Error", instructions: "Could not fetch from DB"))
-            }
-            
-            return Observable.just(drink)
-        }
-        
-        func saveCocktailInDB(_ cocktail: Cocktail) -> Observable<Cocktail> {
-            let cocktailData = try? JSONEncoder().encode(cocktail)
-            UserDefaults.standard.set(cocktailData, forKey: "favouriteDrink")
-            return Observable.just(cocktail)
-        }
-        
         let cocktailFetchedOnLoad = input.viewDidLoadEvent
-            .flatMap({ _  in return getCocktailFromDB() })
+            .flatMap({ _  in return self.databaseManager.getCocktail() })
             .flatMap { cocktail -> Observable<Cocktail> in
                 if cocktail.id.isEmpty {
-                    return getNewRandomCocktail()
+                    return self.getNewRandomCocktail()
                 }
                 return Observable.just(cocktail)
             }
             .asDriver(onErrorJustReturn: Cocktail(id: "", name: "Error", instructions: "Unknown Error"))
         
         let fetchButtonCocktail = input.fetchButtonTap
-            .flatMapLatest { _ in return getNewRandomCocktail() }
+            .flatMapLatest { _ in return self.getNewRandomCocktail() }
             .asDriver(onErrorJustReturn: Cocktail(id: "", name: "Error", instructions: "Unknown Error"))
         
         let currentCocktail = Driver.merge(fetchButtonCocktail, cocktailFetchedOnLoad)
         
         let savingInDB = input.setFavouriteButtonTap
             .withLatestFrom(currentCocktail)
-            .flatMapLatest { saveCocktailInDB($0) }
+            .flatMapLatest { self.databaseManager.saveCocktail($0) }
             .map { $0.name }
             .asDriver(onErrorJustReturn: "Unknown Error")
         
-        let favouriteDrinkFromDB = input.viewDidLoadEvent
-            .flatMap({ _  in return getCocktailFromDB() })
+        let favouriteDrinkFromDB = self.databaseManager.getCocktail()
             .map({ cocktail -> String in
                 if cocktail.id.isEmpty {
                     return "I Don't Drink!"
@@ -85,5 +64,14 @@ class CocktailViewModel {
         let favouriteDrink = Driver.merge(savingInDB, favouriteDrinkFromDB)
         
         return Output(favouriteDrink: favouriteDrink, currentCocktail: currentCocktail)
+    }
+    
+    private func getNewRandomCocktail() -> Observable<Cocktail> {
+        return self.cocktailUsecase
+            .fetchRandomCocktail()
+            .map { $0.drinks.first! }
+            .catchError({ error -> Observable<Cocktail> in
+                return Observable.just(Cocktail(id: "", name: "Error", instructions: error.localizedDescription))
+            })
     }
 }
