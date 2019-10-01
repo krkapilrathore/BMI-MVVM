@@ -7,36 +7,24 @@
 //
 
 import Foundation
-import RxSwift
-import RxCocoa
 
 class BMIViewModel {
     struct Input {
-        let weight: Observable<String>
-        let height: Observable<String>
+        let weight: String
+        let height: String
     }
     
     struct Output {
-        let bmi: Driver<String>
+        let bmi: String
     }
     
     func transform(_ input: Input) -> Output {
-        let heightInput = input.height
-            .map { Double($0) ?? 0.0 }
-            .map { $0/100 }
+        let height = (Double(input.height) ?? 0.0)/100
+        let weight = Double(input.weight) ?? 0.0
         
-        let weightInput = input.weight
-            .map { Double($0) ?? 0.0 }
-        
-        let bmiStream = Observable.combineLatest(heightInput, weightInput)
-            .map { (height, weight) -> String in
-                if weight == 0 && height == 0 { return "Invalid Inputs" }
-                if weight == 0 { return "Invalid Weight" }
-                if height == 0 { return "Invalid Height" }
-                return "\(weight / (height * height))"
-            }
-            .asDriver(onErrorJustReturn: "Invalid")
-        
-        return Output(bmi: bmiStream)
+        if weight == 0 && height == 0 { return Output(bmi: "Invalid Inputs") }
+        if weight == 0 { return Output(bmi: "Invalid Weight") }
+        if height == 0 { return Output(bmi: "Invalid Height") }
+        return Output(bmi: "\(weight / (height * height))")
     }
 }

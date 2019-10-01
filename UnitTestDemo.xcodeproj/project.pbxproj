@@ -17,6 +17,7 @@
 		346D3D3B233BEE8100E44B41 /* CocktailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 346D3D3A233BEE8100E44B41 /* CocktailViewModel.swift */; };
 		346D3D3D233BEEC200E44B41 /* CocktailModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 346D3D3C233BEEC200E44B41 /* CocktailModel.swift */; };
 		346D3D40233BF02800E44B41 /* CocktailTarget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 346D3D3F233BF02800E44B41 /* CocktailTarget.swift */; };
+		34BE57DF23435E4900AEB5AD /* BMIViewModelRx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34BE57DE23435E4900AEB5AD /* BMIViewModelRx.swift */; };
 		34E35A99233BF2FE004285A5 /* CocktailUsecase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34E35A98233BF2FE004285A5 /* CocktailUsecase.swift */; };
 		34E35A9B233BF3FE004285A5 /* CocktailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34E35A9A233BF3FE004285A5 /* CocktailViewController.swift */; };
 		4EA0A12BFF07F2E9CC703935 /* Pods_UnitTestDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11AB16C55715128CEFF6169C /* Pods_UnitTestDemo.framework */; };
@@ -51,6 +52,7 @@
 		346D3D3A233BEE8100E44B41 /* CocktailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CocktailViewModel.swift; sourceTree = "<group>"; };
 		346D3D3C233BEEC200E44B41 /* CocktailModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CocktailModel.swift; sourceTree = "<group>"; };
 		346D3D3F233BF02800E44B41 /* CocktailTarget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CocktailTarget.swift; sourceTree = "<group>"; };
+		34BE57DE23435E4900AEB5AD /* BMIViewModelRx.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BMIViewModelRx.swift; sourceTree = "<group>"; };
 		34E35A98233BF2FE004285A5 /* CocktailUsecase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CocktailUsecase.swift; sourceTree = "<group>"; };
 		34E35A9A233BF3FE004285A5 /* CocktailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CocktailViewController.swift; sourceTree = "<group>"; };
 		57FF1237E02C658E37B68476 /* Pods-UnitTestDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UnitTestDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-UnitTestDemo/Pods-UnitTestDemo.release.xcconfig"; sourceTree = "<group>"; };
@@ -122,6 +124,7 @@
 			children = (
 				346D3D16233BD25D00E44B41 /* ViewController.swift */,
 				346D3D34233BD6F200E44B41 /* BMIViewModel.swift */,
+				34BE57DE23435E4900AEB5AD /* BMIViewModelRx.swift */,
 			);
 			path = BMI;
 			sourceTree = "<group>";
@@ -388,6 +391,7 @@
 			files = (
 				34E35A9B233BF3FE004285A5 /* CocktailViewController.swift in Sources */,
 				346D3D3D233BEEC200E44B41 /* CocktailModel.swift in Sources */,
+				34BE57DF23435E4900AEB5AD /* BMIViewModelRx.swift in Sources */,
 				34E35A99233BF2FE004285A5 /* CocktailUsecase.swift in Sources */,
 				346D3D3B233BEE8100E44B41 /* CocktailViewModel.swift in Sources */,
 				346D3D17233BD25D00E44B41 /* ViewController.swift in Sources */,
