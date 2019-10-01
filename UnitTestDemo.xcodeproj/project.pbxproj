@@ -19,6 +19,7 @@
 		346D3D40233BF02800E44B41 /* CocktailTarget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 346D3D3F233BF02800E44B41 /* CocktailTarget.swift */; };
 		34BE57DF23435E4900AEB5AD /* BMIViewModelRx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34BE57DE23435E4900AEB5AD /* BMIViewModelRx.swift */; };
 		34BE57E323436D9900AEB5AD /* BMIViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34BE57E223436D9900AEB5AD /* BMIViewModelTests.swift */; };
+		34CD7FD2233C8D6F00D47D0F /* DatabaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34CD7FD1233C8D6F00D47D0F /* DatabaseManager.swift */; };
 		34E35A99233BF2FE004285A5 /* CocktailUsecase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34E35A98233BF2FE004285A5 /* CocktailUsecase.swift */; };
 		34E35A9B233BF3FE004285A5 /* CocktailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 34E35A9A233BF3FE004285A5 /* CocktailViewController.swift */; };
 		4EA0A12BFF07F2E9CC703935 /* Pods_UnitTestDemo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 11AB16C55715128CEFF6169C /* Pods_UnitTestDemo.framework */; };
@@ -55,6 +56,7 @@
 		346D3D3F233BF02800E44B41 /* CocktailTarget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CocktailTarget.swift; sourceTree = "<group>"; };
 		34BE57DE23435E4900AEB5AD /* BMIViewModelRx.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BMIViewModelRx.swift; sourceTree = "<group>"; };
 		34BE57E223436D9900AEB5AD /* BMIViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BMIViewModelTests.swift; sourceTree = "<group>"; };
+		34CD7FD1233C8D6F00D47D0F /* DatabaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseManager.swift; sourceTree = "<group>"; };
 		34E35A98233BF2FE004285A5 /* CocktailUsecase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CocktailUsecase.swift; sourceTree = "<group>"; };
 		34E35A9A233BF3FE004285A5 /* CocktailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CocktailViewController.swift; sourceTree = "<group>"; };
 		57FF1237E02C658E37B68476 /* Pods-UnitTestDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UnitTestDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-UnitTestDemo/Pods-UnitTestDemo.release.xcconfig"; sourceTree = "<group>"; };
@@ -150,6 +152,7 @@
 				346D3D3A233BEE8100E44B41 /* CocktailViewModel.swift */,
 				34E35A9A233BF3FE004285A5 /* CocktailViewController.swift */,
 				346D3D3C233BEEC200E44B41 /* CocktailModel.swift */,
+				34CD7FD1233C8D6F00D47D0F /* DatabaseManager.swift */,
 				346D3D3E233BF01600E44B41 /* Network */,
 			);
 			path = Cocktail;
@@ -401,6 +404,7 @@
 				346D3D15233BD25D00E44B41 /* AppDelegate.swift in Sources */,
 				346D3D40233BF02800E44B41 /* CocktailTarget.swift in Sources */,
 				346D3D35233BD6F200E44B41 /* BMIViewModel.swift in Sources */,
+				34CD7FD2233C8D6F00D47D0F /* DatabaseManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

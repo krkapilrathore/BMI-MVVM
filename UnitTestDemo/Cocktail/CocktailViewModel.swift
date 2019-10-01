@@ -11,8 +11,6 @@ import RxSwift
 import RxCocoa
 
 class CocktailViewModel {
-    private let usecase = DefaultCocktailUsecase()
-    
     struct Input {
         let viewDidLoadEvent: Observable<Void>
         let fetchButtonTap: Observable<Void>
@@ -24,9 +22,16 @@ class CocktailViewModel {
         let currentCocktail: Driver<Cocktail>
     }
     
+    private let databaseManager: DatabaseManager
+    private let cocktailUsecase: CocktailUsecase
+    init(_ databaseManager: DatabaseManager, _ cocktailUsecase: CocktailUsecase) {
+        self.databaseManager = databaseManager
+        self.cocktailUsecase = cocktailUsecase
+    }
+    
     func transform(_ input: Input) -> Output {
         
-        let newRandomCocktail = self.usecase
+        let newRandomCocktail = self.cocktailUsecase
             .fetchRandomCocktail()
             .map { $0.drinks.first! }
             .catchError({ error -> Observable<Cocktail> in
@@ -34,17 +39,9 @@ class CocktailViewModel {
             })
         
         let cocktailFetchedOnLoad = input.viewDidLoadEvent
-            .flatMap({ _ -> Observable<Cocktail> in
-                guard let drinkData = UserDefaults.standard.data(forKey: "favouriteDrink"),
-                    let cocktail = try? JSONDecoder().decode(Cocktail.self, from: drinkData) else {
-                        return Observable.just(Cocktail(id: "", name: "Error", instructions: "Could not fetch from DB"))
-                }
-                return Observable.just(cocktail)
-            })
+            .flatMap({ _  in return self.databaseManager.getCocktail() })
             .flatMap { cocktail -> Observable<Cocktail> in
-                if cocktail.id.isEmpty {
-                    return newRandomCocktail
-                }
+                if cocktail.id.isEmpty { return newRandomCocktail }
                 return Observable.just(cocktail)
             }
             .asDriver(onErrorJustReturn: Cocktail(id: "", name: "Error", instructions: "Unknown Error"))
@@ -57,20 +54,15 @@ class CocktailViewModel {
         
         let savingInDB = input.setFavouriteButtonTap
             .withLatestFrom(currentCocktail)
-            .flatMapLatest { cocktail -> Driver<String> in
-                let drinkData = try? JSONEncoder().encode(cocktail)
-                UserDefaults.standard.set(drinkData, forKey: "favouriteDrink")
-                return Driver.just(cocktail.name)
-            }
+            .flatMapLatest { self.databaseManager.saveCocktail($0) }
+            .map { $0.name }
             .asDriver(onErrorJustReturn: "Unknown Error")
         
         let favouriteDrinkFromDB = input.viewDidLoadEvent
-            .flatMap({ _ -> Observable<String> in
-                guard let drinkData = UserDefaults.standard.data(forKey: "favouriteDrink"),
-                    let cocktail = try? JSONDecoder().decode(Cocktail.self, from: drinkData) else {
-                        return Observable.just("Error on fetch from DB")
-                }
-                return Observable.just(cocktail.name)
+            .flatMap({ _  in return self.databaseManager.getCocktail() })
+            .map({ cocktail -> String in
+                if cocktail.id.isEmpty { return "I Don't Drink!" }
+                return cocktail.name
             })
             .asDriver(onErrorJustReturn: "I Don't Drink!")
         

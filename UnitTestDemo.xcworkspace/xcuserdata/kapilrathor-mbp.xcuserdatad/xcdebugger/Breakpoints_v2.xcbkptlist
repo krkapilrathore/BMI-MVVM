@@ -2,4 +2,57 @@
 <Bucket
    type = "0"
    version = "2.0">
+<<<<<<< Updated upstream
+=======
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "UnitTestDemo/Cocktail/Network/CocktailTarget.swift"
+            timestampString = "591139433.341608"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "25"
+            endingLineNumber = "25"
+            landmarkName = "path"
+            landmarkType = "24">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "UnitTestDemo.CocktailTarget.path.getter : Swift.String"
+                  moduleName = "UnitTestDemo"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/kapilrathor-mbp/Documents/Learning/iOS/UnitTestDemo/UnitTestDemo/Cocktail/Network/CocktailTarget.swift"
+                  timestampString = "591166225.5484149"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "25"
+                  endingLineNumber = "25"
+                  offsetFromSymbolStart = "111">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "UnitTestDemo.CocktailTarget.path.getter : Swift.String"
+                  moduleName = "UnitTestDemo"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/kapilrathor-mbp/Documents/Learning/iOS/UnitTestDemo/UnitTestDemo/Cocktail/Network/CocktailTarget.swift"
+                  timestampString = "591166225.552232"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "25"
+                  endingLineNumber = "25"
+                  offsetFromSymbolStart = "235">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
+>>>>>>> Stashed changes
 </Bucket>

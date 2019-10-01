@@ -21,8 +21,6 @@ class CocktailViewController: UIViewController {
     private let disposeBag = DisposeBag()
     private let usecase = DefaultCocktailUsecase()
     
-    private let viewModel = CocktailViewModel()
-    
     private let viewDidLoadEvents = PublishSubject<Void>()
     
     override func viewDidLoad() {
@@ -32,6 +30,10 @@ class CocktailViewController: UIViewController {
     }
     
     private func bindViewModel() {
+        let databaseManager = DefaultDatabaseManager()
+        let cocktailUsecase = DefaultCocktailUsecase()
+        let viewModel = CocktailViewModel(databaseManager, cocktailUsecase)
+        
         let input = CocktailViewModel.Input.init(
             viewDidLoadEvent: viewDidLoadEvents.asObservable(),
             fetchButtonTap: fetchNewButton.rx.tap.asObservable(),
