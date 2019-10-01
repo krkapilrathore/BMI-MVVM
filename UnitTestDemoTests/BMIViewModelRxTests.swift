@@ -1,6 +1,6 @@
 //
-//  UnitTestDemoTests.swift
-//  UnitTestDemoTests
+//  BMIViewModelRxTests.swift
+//  BMIViewModelRxTests
 //
 //  Created by kapilrathore-mbp on 25/09/19.
 //  Copyright © 2019 Tokopedia. All rights reserved.
@@ -11,7 +11,7 @@ import RxTest
 import RxSwift
 @testable import UnitTestDemo
 
-class UnitTestDemoTests: XCTestCase {
+class BMIViewModelRxTests: XCTestCase {
     
     var testObserver: TestableObserver<String>!
     var disposeBag: DisposeBag!
@@ -24,9 +24,8 @@ class UnitTestDemoTests: XCTestCase {
         weightInput = PublishSubject<String>()
         heightInput = PublishSubject<String>()
         
-        let viewModel: BMIViewModel = BMIViewModel()
-        let input = BMIViewModel.Input(weight: weightInput.asObserver(), height: heightInput.asObserver())
-        let output = viewModel.transform(input)
+        let input = BMIViewModelRx.Input(weight: weightInput.asObserver(), height: heightInput.asObserver())
+        let output = BMIViewModelRx().transform(input)
         
         output.bmi.drive(testObserver).disposed(by: disposeBag)
     }
