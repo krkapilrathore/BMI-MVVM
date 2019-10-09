@@ -6,6 +6,8 @@ PODS:
   - Moya/RxSwift (13.0.1):
     - Moya/Core
     - RxSwift (~> 4.0)
+  - Nimble (8.0.4)
+  - Quick (2.2.0)
   - Result (4.1.0)
   - RxBlocking (4.5.0):
     - RxSwift (>= 4.4.2, ~> 4.4)
@@ -17,6 +19,8 @@ PODS:
 
 DEPENDENCIES:
   - Moya/RxSwift
+  - Nimble
+  - Quick
   - RxBlocking
   - RxCocoa
   - RxSwift
@@ -26,6 +30,8 @@ SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - Alamofire
     - Moya
+    - Nimble
+    - Quick
     - Result
     - RxBlocking
     - RxCocoa
@@ -35,12 +41,14 @@ SPEC REPOS:
 SPEC CHECKSUMS:
   Alamofire: ae5c501addb7afdbb13687d7f2f722c78734c2d3
   Moya: f4a4b80ff2f8a4ffc208dfb31cd91636622fee6e
+  Nimble: 18d5360282923225d62b09d781f63abc1a0111fc
+  Quick: 7fb19e13be07b5dfb3b90d4f9824c855a11af40e
   Result: bd966fac789cc6c1563440b348ab2598cc24d5c7
   RxBlocking: 79413e4d916f44bb3e113c5b2cc059e36fe58910
   RxCocoa: cbf70265dc65a981d4ac982e513c10cf23df24a0
   RxSwift: f172070dfd1a93d70a9ab97a5a01166206e1c575
   RxTest: 3ccb66bfbace0bf7df1c43a7c75d046f8ce60372
 
-PODFILE CHECKSUM: b1f2cd1687d0a61ca9b820323f22b3d44d6e995c
+PODFILE CHECKSUM: 78965ca4b1ed68e8dd5b9e485dc5c96d109daa02
 
 COCOAPODS: 1.5.3

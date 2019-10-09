@@ -14,5 +14,7 @@ target 'UnitTestDemo' do
     inherit! :search_paths
     pod 'RxBlocking'
     pod 'RxTest'
+    pod 'Quick'
+    pod 'Nimble'
   end
 end

@@ -59,7 +59,14 @@ class CocktailViewModelTests: XCTestCase {
     }
     
     // MARK:- Test Suit
-    func test_viewDidLoad_favouriteDrinkPresentInDB() { }
+    func test_viewDidLoad_favouriteDrinkPresentInDB() {
+        // Given
+        let drink = Cocktail(id: "123", name: "Name", instructions: "some random")
+        
+        // When
+        // Then
+    }
+    
     func test_viewDidLoad_noFavouriteDrinkInDB_fetchFromUsecaseReturnsError() { }
     func test_viewDidLoad_noFavouriteDrinkInDB_fetchFromUsecaseReturnsSuccess() { }
     func test_fetchButtonTapped_fetchFromUsecaseReturnsError() { }
