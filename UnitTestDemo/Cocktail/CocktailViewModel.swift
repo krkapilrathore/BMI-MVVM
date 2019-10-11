@@ -31,23 +31,16 @@ class CocktailViewModel {
     
     func transform(_ input: Input) -> Output {
         
-        let newRandomCocktail = self.cocktailUsecase
-            .fetchRandomCocktail()
-            .map { $0.drinks.first! }
-            .catchError({ error -> Observable<Cocktail> in
-                return Observable.just(Cocktail(id: "", name: "Error", instructions: error.localizedDescription))
-            })
-        
         let cocktailFetchedOnLoad = input.viewDidLoadEvent
             .flatMap({ _  in return self.databaseManager.getCocktail() })
             .flatMap { cocktail -> Observable<Cocktail> in
-                if cocktail.id.isEmpty { return newRandomCocktail }
+                if cocktail.id.isEmpty { return fetchNewRandomCocktail() }
                 return Observable.just(cocktail)
             }
             .asDriver(onErrorJustReturn: Cocktail(id: "", name: "Error", instructions: "Unknown Error"))
         
         let fetchButtonCocktail = input.fetchButtonTap
-            .flatMapLatest { _ in return newRandomCocktail }
+            .flatMapLatest { _ in return fetchNewRandomCocktail() }
             .asDriver(onErrorJustReturn: Cocktail(id: "", name: "Error", instructions: "Unknown Error"))
         
         let currentCocktail = Driver.merge(fetchButtonCocktail, cocktailFetchedOnLoad)
