@@ -31,6 +31,15 @@ class CocktailViewModel {
     
     func transform(_ input: Input) -> Output {
         
+        func fetchNewRandomCocktail() -> Observable<Cocktail> {
+            return self.cocktailUsecase
+                .fetchRandomCocktail()
+                .map { $0.drinks.first! }
+                .catchError({ error -> Observable<Cocktail> in
+                    return Observable.just(Cocktail(id: "", name: "Error", instructions: "API Error"))
+                })
+        }
+        
         let cocktailFetchedOnLoad = input.viewDidLoadEvent
             .flatMap({ _  in return self.databaseManager.getCocktail() })
             .flatMap { cocktail -> Observable<Cocktail> in
