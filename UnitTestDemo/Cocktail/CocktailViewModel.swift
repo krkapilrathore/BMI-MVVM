@@ -26,12 +26,14 @@ class CocktailViewModel {
     
     func transform(_ input: Input) -> Output {
         
-        let newRandomCocktail = self.usecase
-            .fetchRandomCocktail()
-            .map { $0.drinks.first! }
-            .catchError({ error -> Observable<Cocktail> in
-                return Observable.just(Cocktail(id: "", name: "Error", instructions: error.localizedDescription))
-            })
+        func fetchNewRandomCocktail() -> Observable<Cocktail> {
+            return self.usecase
+                .fetchRandomCocktail()
+                .map { $0.drinks.first! }
+                .catchError({ error -> Observable<Cocktail> in
+                    return Observable.just(Cocktail(id: "", name: "Error", instructions: error.localizedDescription))
+                })
+        }
         
         let cocktailFetchedOnLoad = input.viewDidLoadEvent
             .flatMap({ _ -> Observable<Cocktail> in
@@ -42,15 +44,13 @@ class CocktailViewModel {
                 return Observable.just(cocktail)
             })
             .flatMap { cocktail -> Observable<Cocktail> in
-                if cocktail.id.isEmpty {
-                    return newRandomCocktail
-                }
+                if cocktail.id.isEmpty { return fetchNewRandomCocktail() }
                 return Observable.just(cocktail)
             }
             .asDriver(onErrorJustReturn: Cocktail(id: "", name: "Error", instructions: "Unknown Error"))
         
         let fetchButtonCocktail = input.fetchButtonTap
-            .flatMapLatest { _ in return newRandomCocktail }
+            .flatMapLatest { _ in return fetchNewRandomCocktail() }
             .asDriver(onErrorJustReturn: Cocktail(id: "", name: "Error", instructions: "Unknown Error"))
         
         let currentCocktail = Driver.merge(fetchButtonCocktail, cocktailFetchedOnLoad)
